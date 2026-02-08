@@ -139,6 +139,11 @@ public class Parser {
     }
     
     private Expression term() throws JafException {
+        if (tokens.match(Token.Type.MINUS)) {
+            Expression right = term();
+            return new BinaryOp(BinaryOp.Operator.SUBTRACT, new IntLiteral(0), right);
+        }
+        
         Expression expr = factor();
         
         while (tokens.match(Token.Type.MULTIPLY) || tokens.match(Token.Type.DIVIDE)) {
@@ -178,16 +183,14 @@ public class Parser {
         return expr;
     }
     
-    private Expression unary() throws JafException {
+    
+    private Expression primary() throws JafException {
+    	
         if (tokens.match(Token.Type.MINUS)) {
-            Expression right = unary();
+            Expression right = primary();
             return new BinaryOp(BinaryOp.Operator.SUBTRACT, new IntLiteral(0), right);
         }
         
-        return access();
-    }
-    
-    private Expression primary() throws JafException {
         if (tokens.match(Token.Type.LEFT_BRACKET)) {
             return arrayLiteral();
         }
