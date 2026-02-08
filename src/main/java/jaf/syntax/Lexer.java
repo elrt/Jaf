@@ -39,6 +39,12 @@ public class Lexer {
         char c = advance();
         
         switch (c) {
+            case '#':
+                while (peek() != '\n' && !isAtEnd()) {
+                    advance();
+                }
+                break;
+                
             case '+': addToken(Token.Type.PLUS); break;
             case '-': addToken(Token.Type.MINUS); break;
             case '*': addToken(Token.Type.MULTIPLY); break;
