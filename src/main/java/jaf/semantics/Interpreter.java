@@ -157,6 +157,10 @@ public class Interpreter implements AstVisitor<Value> {
             return new BuiltinFunctionValue("length");
         }
         
+        if (name.equals("print")) {
+            return new BuiltinFunctionValue("print");
+        }
+        
         return environment.get(name);
     }
     
@@ -234,6 +238,14 @@ public class Interpreter implements AstVisitor<Value> {
             Value argument = node.getArgument().accept(this);
             
             return builtinLength(argument);
+        }
+        
+        if (functionName.equals("print")) {
+            Value argument = node.getArgument().accept(this);
+            
+            System.out.println(argument);
+            
+            return VoidValue.INSTANCE;
         }
         
         FunctionValue function = getFunction(functionName);
