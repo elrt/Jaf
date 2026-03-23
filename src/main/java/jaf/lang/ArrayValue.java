@@ -5,52 +5,52 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public final class ArrayValue implements Value {
-    
-    private final List<IntValue> elements;
-    
-    public ArrayValue(List<IntValue> elements) {
+
+    private final List<NumberValue> elements;
+
+    public ArrayValue(List<NumberValue> elements) {
         this.elements = new ArrayList<>(elements);
     }
-    
+
     public ArrayValue(int size) {
         this.elements = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            elements.add(new IntValue(0));
+            elements.add(new NumberValue(0));
         }
     }
-    
+
     public int size() {
         return elements.size();
     }
-    
-    public IntValue get(int index) {
+
+    public NumberValue get(int index) {
         checkBounds(index);
         return elements.get(index);
     }
-    
-    public void set(int index, IntValue value) {
+
+    public void set(int index, NumberValue value) {
         checkBounds(index);
         elements.set(index, value);
     }
-    
+
     private void checkBounds(int index) {
         if (index < 0 || index >= elements.size()) {
             throw new JafRuntimeException(
-                String.format("Array index out of bounds: %d (size: %d)", 
-                    index, elements.size())
+                    String.format("Array index out of bounds: %d (size: %d)",
+                            index, elements.size())
             );
         }
     }
-    
-    public List<IntValue> getElements() {
+
+    public List<NumberValue> getElements() {
         return Collections.unmodifiableList(elements);
     }
-    
+
     @Override
     public String getType() {
         return "array";
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
@@ -61,7 +61,7 @@ public final class ArrayValue implements Value {
         sb.append("]");
         return sb.toString();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -69,7 +69,7 @@ public final class ArrayValue implements Value {
         ArrayValue other = (ArrayValue) obj;
         return elements.equals(other.elements);
     }
-    
+
     @Override
     public int hashCode() {
         return elements.hashCode();

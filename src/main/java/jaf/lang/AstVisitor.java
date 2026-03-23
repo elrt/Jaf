@@ -1,8 +1,11 @@
 package jaf.lang;
 
 public interface AstVisitor<R> {
-    
+
     default R visit(AstNode node) {
+        if (node instanceof jaf.syntax.NumberLiteral) {
+            return visit((jaf.syntax.NumberLiteral) node);
+        }
         if (node instanceof jaf.syntax.IntLiteral) {
             return visit((jaf.syntax.IntLiteral) node);
         }
@@ -41,51 +44,55 @@ public interface AstVisitor<R> {
         }
         throw new JafVisitorException(getClass(), node.getClass());
     }
-    
+
+    default R visit(jaf.syntax.NumberLiteral node) {
+        throw new JafVisitorException(getClass(), node.getClass());
+    }
+
     default R visit(jaf.syntax.IntLiteral node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
-    
+
     default R visit(jaf.syntax.BinaryOp node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
-    
+
     default R visit(jaf.syntax.Variable node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
-    
+
     default R visit(jaf.syntax.Assignment node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
-    
+
     default R visit(jaf.syntax.Block node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
-    
+
     default R visit(jaf.syntax.IfExpression node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
-    
+
     default R visit(jaf.syntax.WhileExpression node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
-    
+
     default R visit(jaf.syntax.FunctionDefinition node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
-    
+
     default R visit(jaf.syntax.FunctionCall node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
-    
+
     default R visit(jaf.syntax.ArrayLiteral node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
-    
+
     default R visit(jaf.syntax.ArrayAccess node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
-    
+
     default R visit(jaf.syntax.ArrayAssignment node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
