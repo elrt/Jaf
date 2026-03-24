@@ -190,9 +190,9 @@ public class Parser {
             return new NumberLiteral(token.getNumberValue());
         }
 
-        if (tokens.match(Token.Type.INT_LITERAL)) {
+        if (tokens.match(Token.Type.STRING)) {
             Token token = tokens.getTokens().get(tokens.getPosition() - 1);
-            return new NumberLiteral(token.getIntValue());
+            return new StringLiteral(token.getStringValue());
         }
 
         if (tokens.match(Token.Type.LEFT_BRACKET)) {
@@ -228,7 +228,7 @@ public class Parser {
 
         Token token = tokens.peek();
         throw new JafException(
-                String.format("Expected number, variable, array, func, while, if, block or parentheses, got %s", token.getType()),
+                String.format("Expected number, string, variable, array, func, while, if, block or parentheses, got %s", token.getType()),
                 token.getLine(), token.getColumn()
         );
     }

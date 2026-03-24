@@ -87,6 +87,9 @@ public class Lexer {
                     throw new JafException("Expected '||'", line, column - 1);
                 }
                 break;
+            case '"':
+                string();
+                break;
 
             case ' ':
             case '\t':
@@ -100,8 +103,6 @@ public class Lexer {
 
             default:
                 if (isDigit(c)) {
-                    number();
-                } else if (c == '.' && isDigit(peek())) {
                     number();
                 } else if (isAlpha(c)) {
                     identifier();
@@ -140,6 +141,26 @@ public class Lexer {
         String lexeme = source.substring(start, current);
         double value = Double.parseDouble(lexeme);
         addToken(new Token(Token.Type.NUMBER, lexeme, value, line, column - lexeme.length()));
+    }
+
+    private void string() throws JafException {
+        while (peek() != '"' && !isAtEnd()) {
+            if (peek() == '\n') {
+                line++;
+                column = 1;
+            }
+            advance();
+        }
+
+        if (isAtEnd()) {
+            throw new JafException("Unterminated string", line, column);
+        }
+
+        advance();
+
+        String lexeme = source.substring(start, current);
+        String value = lexeme.substring(1, lexeme.length() - 1);
+        addToken(new Token(Token.Type.STRING, lexeme, value, line, column - lexeme.length()));
     }
 
     private void identifier() {

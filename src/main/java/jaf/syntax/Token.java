@@ -6,7 +6,7 @@ public final class Token implements Immutable {
 
     public enum Type {
         NUMBER,
-        INT_LITERAL,
+        STRING,
         IDENTIFIER,
         IF,
         ELSE,
@@ -51,7 +51,7 @@ public final class Token implements Immutable {
     }
 
     public static Token intLiteral(int value, String lexeme, int line, int column) {
-        return new Token(Type.INT_LITERAL, lexeme, value, line, column);
+        return new Token(Type.NUMBER, lexeme, (double) value, line, column);
     }
 
     public static Token identifier(String name, int line, int column) {
@@ -82,18 +82,18 @@ public final class Token implements Immutable {
         return column;
     }
 
-    public int getIntValue() {
-        if (type != Type.INT_LITERAL) {
-            throw new IllegalStateException("Token is not INT_LITERAL: " + type);
-        }
-        return (Integer) literal;
-    }
-
     public double getNumberValue() {
         if (type != Type.NUMBER) {
             throw new IllegalStateException("Token is not NUMBER: " + type);
         }
         return (Double) literal;
+    }
+
+    public String getStringValue() {
+        if (type != Type.STRING) {
+            throw new IllegalStateException("Token is not STRING: " + type);
+        }
+        return (String) literal;
     }
 
     public String getIdentifier() {

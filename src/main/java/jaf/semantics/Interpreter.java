@@ -4,11 +4,13 @@ import jaf.lang.AstVisitor;
 import jaf.lang.Value;
 import jaf.lang.JafRuntimeException;
 import jaf.lang.NumberValue;
+import jaf.lang.StringValue;
 import jaf.lang.BitValue;
 import jaf.lang.BuiltinFunctionValue;
 import jaf.lang.VoidValue;
 import jaf.lang.FunctionValue;
 import jaf.lang.ArrayValue;
+import jaf.syntax.StringLiteral;
 import jaf.syntax.NumberLiteral;
 import jaf.syntax.IntLiteral;
 import jaf.syntax.BinaryOp;
@@ -152,6 +154,11 @@ public class Interpreter implements AstVisitor<Value> {
     }
 
     @Override
+    public Value visit(StringLiteral node) {
+        return new StringValue(node.getValue());
+    }
+
+    @Override
     public Value visit(NumberLiteral node) {
         return new NumberValue(node.getValue());
     }
@@ -168,6 +175,9 @@ public class Interpreter implements AstVisitor<Value> {
 
         switch (node.getOperator()) {
             case ADD:
+                if (left instanceof StringValue || right instanceof StringValue) {
+                    return new StringValue(left.toString() + right.toString());
+                }
                 return new NumberValue(toNumber(left, "addition") + toNumber(right, "addition"));
             case SUBTRACT:
                 return new NumberValue(toNumber(left, "subtraction") - toNumber(right, "subtraction"));
@@ -202,6 +212,9 @@ public class Interpreter implements AstVisitor<Value> {
     }
 
     private BitValue equal(Value left, Value right) {
+        if (left instanceof StringValue && right instanceof StringValue) {
+            return new BitValue(((StringValue) left).getValue().equals(((StringValue) right).getValue()));
+        }
         if (left instanceof NumberValue && right instanceof NumberValue) {
             double leftNum = ((NumberValue) left).getValue();
             double rightNum = ((NumberValue) right).getValue();

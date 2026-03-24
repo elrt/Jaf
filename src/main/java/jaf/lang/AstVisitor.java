@@ -3,6 +3,9 @@ package jaf.lang;
 public interface AstVisitor<R> {
 
     default R visit(AstNode node) {
+        if (node instanceof jaf.syntax.StringLiteral) {
+            return visit((jaf.syntax.StringLiteral) node);
+        }
         if (node instanceof jaf.syntax.NumberLiteral) {
             return visit((jaf.syntax.NumberLiteral) node);
         }
@@ -42,6 +45,10 @@ public interface AstVisitor<R> {
         if (node instanceof jaf.syntax.ArrayAssignment) {
             return visit((jaf.syntax.ArrayAssignment) node);
         }
+        throw new JafVisitorException(getClass(), node.getClass());
+    }
+
+    default R visit(jaf.syntax.StringLiteral node) {
         throw new JafVisitorException(getClass(), node.getClass());
     }
 
